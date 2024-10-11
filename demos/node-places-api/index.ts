@@ -4,7 +4,8 @@ import {
   findPlacesWithinExtent,
   getPlaceDetails,
   getCategories,
-  getCategory
+  getCategory,
+  IconOptions
 } from "@esri/arcgis-rest-places";
 import * as dotenv from "dotenv";
 import fs from "fs";
@@ -12,11 +13,13 @@ import fs from "fs";
 dotenv.config();
 
 const authentication = ApiKeyManager.fromKey(process.env.API_KEY as string);
+console.warn("-->", authentication);
 
 let lastResponse = await findPlacesNearPoint({
   x: -3.1883,
   y: 55.9533,
   radius: 100,
+  icon: IconOptions.PNG,
   authentication
 });
 
@@ -40,6 +43,7 @@ const extentResults = await findPlacesWithinExtent({
   xmax: -117.995753,
   ymax: 33.833337,
   categoryIds: ["13002"],
+  icon: IconOptions.CIM,
   authentication
 });
 
@@ -51,6 +55,7 @@ fs.promises.writeFile(
 const placeResult = await getPlaceDetails({
   placeId: extentResults.results[0].placeId,
   requestedFields: ["all"],
+  icon: IconOptions.SVG,
   authentication
 });
 
@@ -83,7 +88,10 @@ if (placeResult.placeDetails.categories) {
   );
 }
 
-const { categories } = await getCategories({ authentication });
+const { categories } = await getCategories({
+  authentication,
+  icon: IconOptions.PNG
+});
 
 console.log("Found categories: ", categories.length);
 
@@ -92,7 +100,8 @@ fs.promises.writeFile(
   JSON.stringify(categories, null, 2)
 );
 const categoryMock = await getCategory({
-  categoryId: "10000",
+  categoryId: "10001",
+  icon: IconOptions.CIM,
   authentication
 });
 
