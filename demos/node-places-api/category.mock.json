@@ -1,7 +1,13 @@
 {
-  "categoryId": "10000",
+  "categoryId": "10001",
   "fullLabel": [
-    "Arts and Entertainment"
+    "Arts and Entertainment",
+    "Amusement Park"
   ],
-  "parents": []
+  "parents": [
+    "10000"
+  ],
+  "icon": {
+    "url": "https://static.arcgis.com/icons/places/Amusement_Park_15.cim"
+  }
 }
