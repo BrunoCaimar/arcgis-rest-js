@@ -238,7 +238,6 @@ export class Job {
    */
   private setIntervalHandler: any;
 
-
   constructor(options: IJobOptions) {
     const { url, id, pollingRate, authentication }: Partial<IJobOptions> = {
       ...DefaultJobOptions,
