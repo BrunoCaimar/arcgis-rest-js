@@ -2,7 +2,7 @@
  * Apache-2.0 */
 
 import { ArcGISRequestError } from "../../src/index.js";
-import { ArcGISOnlineError } from "../mocks/errors.js";
+import { ArcGISOnlineError, GenerateTokenError } from "../mocks/errors.js";
 
 describe("ArcGISRequestError", () => {
   it("should be an instanceof Error", () => {
@@ -28,6 +28,7 @@ describe("ArcGISRequestError", () => {
     expect(error.code).toBe(400);
     expect(error.originalMessage).toBe("'type' and 'title' property required.");
     expect(error.response).toEqual(ArcGISOnlineError);
+    expect(error.details).toEqual([]);
     expect(error.url).toBe("https://example.com");
     expect(error.options.params).toEqual({ f: "json" });
     expect(error.options.httpMethod).toEqual("POST");
@@ -47,5 +48,31 @@ describe("ArcGISRequestError", () => {
     expect(error.code).toEqual("UNKNOWN_ERROR_CODE");
     expect(error.originalMessage).toBe("UNKNOWN_ERROR");
     expect(error.response).toEqual(undefined);
+  });
+
+  it("should expose error details", () => {
+    const error = new ArcGISRequestError(
+      ArcGISOnlineError.error.message,
+      ArcGISOnlineError.error.code,
+      GenerateTokenError,
+      "https://example.com",
+      {
+        params: {
+          f: "json"
+        },
+        httpMethod: "POST"
+      }
+    );
+
+    expect(error.name).toBe("ArcGISRequestError");
+    expect(error.message).toBe("400: 'type' and 'title' property required.");
+    expect(error.code).toBe(400);
+    expect(error.originalMessage).toBe("'type' and 'title' property required.");
+    expect(error.response).toEqual(GenerateTokenError);
+    expect(error.response.error.details).toEqual([
+      "Invalid username or password."
+    ]);
+    expect(error.details).toEqual(["Invalid username or password."]);
+    expect(error.options.params).toEqual({ f: "json" });
   });
 });

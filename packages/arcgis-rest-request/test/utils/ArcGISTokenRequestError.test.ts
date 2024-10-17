@@ -5,7 +5,7 @@ import {
   ArcGISTokenRequestError,
   ArcGISTokenRequestErrorCodes
 } from "../../src/index.js";
-import { RefreshTokenError } from "./../mocks/errors.js";
+import { RefreshTokenError, GenerateTokenError } from "./../mocks/errors.js";
 
 describe("ArcGISTokenRequestError", () => {
   it("should be an instanceof Error", () => {
@@ -46,5 +46,28 @@ describe("ArcGISTokenRequestError", () => {
     expect(error.code).toEqual("UNKNOWN_ERROR_CODE");
     expect(error.originalMessage).toBe("UNKNOWN_ERROR");
     expect(error.response).toEqual(undefined);
+  });
+
+  it("should expose error details property", () => {
+    const error = new ArcGISTokenRequestError(
+      RefreshTokenError.error.message,
+      ArcGISTokenRequestErrorCodes.REFRESH_TOKEN_EXCHANGE_FAILED,
+      GenerateTokenError,
+      "https://example.com",
+      {
+        params: {
+          f: "json"
+        },
+        httpMethod: "POST"
+      }
+    );
+
+    expect(error.name).toBe("ArcGISTokenRequestError");
+    expect(error.details).toEqual(["Invalid username or password."]);
+    expect(error.response.error.details).toEqual([
+      "Invalid username or password."
+    ]);
+    expect(error.options.params).toEqual({ f: "json" });
+    expect(error.options.httpMethod).toEqual("POST");
   });
 });
