@@ -53,6 +53,11 @@ export class ArcGISRequestError extends Error {
   public options: IRequestOptions;
 
   /**
+   * Error details. Same as response.details
+   */
+  public details: any;
+
+  /**
    * Create a new `ArcGISRequestError`  object.
    *
    * @param message - The error message from the API
@@ -89,5 +94,15 @@ export class ArcGISRequestError extends Error {
     this.response = response;
     this.url = url;
     this.options = options;
+    console.warn("");
+    console.warn("======> response", response);
+    console.warn("  =========> response.error", response?.error);
+    console.warn(
+      "    =========> response.error.details",
+      response?.error?.details
+    );
+    console.warn("");
+    this.details = response?.error?.details;
+    console.warn("      =========> this.details", this.details);
   }
 }

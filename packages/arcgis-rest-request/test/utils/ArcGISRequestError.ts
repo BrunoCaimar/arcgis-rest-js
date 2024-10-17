@@ -28,6 +28,7 @@ describe("ArcGISRequestError", () => {
     expect(error.code).toBe(400);
     expect(error.originalMessage).toBe("'type' and 'title' property required.");
     expect(error.response).toEqual(ArcGISOnlineError);
+    expect(error.details).toEqual(ArcGISOnlineError.error);
     expect(error.url).toBe("https://example.com");
     expect(error.options.params).toEqual({ f: "json" });
     expect(error.options.httpMethod).toEqual("POST");
